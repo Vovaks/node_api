@@ -19,4 +19,4 @@ CRUD:
 ## TODO:
 
 - schema in MongoDB
-- added 
+- verifyToken for validate authenticate in routes

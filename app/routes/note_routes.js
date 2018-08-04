@@ -1,5 +1,7 @@
 var ObjectID = require('mongodb').ObjectID;
 
+//TODO: add verifyToken for validate authenticate
+
 module.exports = function(app, db) {
 
     /**Get by ID**/
@@ -17,19 +19,37 @@ module.exports = function(app, db) {
 
     /**Insert**/
     app.post('/notes', (req, res) => {
-        const note = {
-            text: req.body.body,
-            title: req.body.title,
-            author: req.body.author,
-            createDate: new Date()
-        };
-        db.collection('notes').insert(note, (err, result) => {
-            if (err) {
-                return res.send({ 'error': 'An error has occurred' });
-            } else {
-                return res.send(result.ops[0]);
-            }
-        });
+        let body = req.body;
+
+        if(body.text && body.title && body.author){
+            const note = {
+                text: body.text,
+                title: body.title,
+                author: body.author,
+                createDate: new Date()
+            };
+
+            db.collection('notes').insert(note, (err, result) => {
+                if (err) {
+                    return res.send({
+                        error: true,
+                        message: 'An error has occurred'
+                    });
+                } else {
+                    return res.send({
+                        message: 'Note added' + result.ops[0]
+                        }
+                    );
+                }
+            });
+        }else{
+            return res.send({
+                error: true,
+                message: 'empty inputs'
+            });
+        }
+
+
     });
 
     /**Delete by id**/
@@ -38,7 +58,10 @@ module.exports = function(app, db) {
         const details = { '_id': new ObjectID(id) };
         db.collection('notes').remove(details, (err, item) => {
             if (err) {
-                res.send({'error':'An error has occurred'});
+                res.send({
+                    error: true,
+                    message: 'An error has occurred'
+                });
             } else {
                 res.send('Note ' + id + ' deleted!');
             }
