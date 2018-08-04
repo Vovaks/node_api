@@ -67,7 +67,7 @@ module.exports = function (app, db) {
     });
 
     app.post('/userCheck', verifyToken, function (req, res) {
-        jwt.verify(req.token, config.verify.secretKey, (err, authData) => {
+        jwt.verify(req.token, config.jwt.secretKey, (err, authData) => {
             if (err) {
                 res.sendStatus(403)
             } else {
