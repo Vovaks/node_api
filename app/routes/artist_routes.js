@@ -66,9 +66,5 @@ module.exports = function(app, db) {
                 res.sendStatus(200)
             }
         )
-        // artists = artists.filter(function (artist) {
-        //     return artist.id !== Number(req.params.id);
-        // });
-        // res.sendStatus(200);
     });
 };
